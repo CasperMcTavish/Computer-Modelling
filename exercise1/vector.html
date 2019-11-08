@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module vector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>vector</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/s1739002/compmod/Exercise1/vector.py">/home/s1739002/compmod/Exercise1/vector.py</a></font></td></tr></table>
+    <p><tt>CMod&nbsp;Ex.&nbsp;2:&nbsp;vector.py,&nbsp;a&nbsp;set&nbsp;of&nbsp;functions&nbsp;used&nbsp;to&nbsp;allow&nbsp;vector&nbsp;operations<br>
+&nbsp;<br>
+Author:&nbsp;J.&nbsp;Waiton<br>
+Version:&nbsp;10/2019</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="math.html">math</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-addv"><strong>addv</strong></a>(v1, v2)</dt><dd><tt>Vector&nbsp;sum<br>
+&nbsp;<br>
+:param&nbsp;v1:&nbsp;vector&nbsp;1<br>
+:param&nbsp;v2:&nbsp;vector&nbsp;2<br>
+:return:&nbsp;vector&nbsp;sum&nbsp;[v1[0]+v2[0],v1[1]+v2[1],v1[2]+v2[2]]</tt></dd></dl>
+ <dl><dt><a name="-crossprod"><strong>crossprod</strong></a>(v1, v2)</dt><dd><tt>Cross&nbsp;Product<br>
+&nbsp;<br>
+:param&nbsp;v1:&nbsp;Vector&nbsp;1<br>
+:param&nbsp;v2:&nbsp;Vector&nbsp;2<br>
+:return:&nbsp;Cross&nbsp;Product&nbsp;[(v1[1]*v2[2])-(v1[2]*v2[1]),-((v1[0]*v2[2])-(v1[2]*v2[0])),(v1[0]*v2[1])-(v1[1]*v2[0])]</tt></dd></dl>
+ <dl><dt><a name="-div"><strong>div</strong></a>(v, scal)</dt><dd><tt>Division&nbsp;of&nbsp;Vector&nbsp;with&nbsp;scalar<br>
+&nbsp;<br>
+:param&nbsp;v:&nbsp;vector<br>
+:param&nbsp;scal:&nbsp;scalar<br>
+:return:&nbsp;scaled&nbsp;vector&nbsp;[v[0]/scal,v[1]/scal,v[2]/scal]</tt></dd></dl>
+ <dl><dt><a name="-dot_prod"><strong>dot_prod</strong></a>(v1, v2)</dt><dd><tt>Dot&nbsp;Product<br>
+&nbsp;<br>
+:param&nbsp;v1:&nbsp;Vector&nbsp;1<br>
+:param&nbsp;v2:&nbsp;Vector&nbsp;2<br>
+:return:&nbsp;dot&nbsp;product&nbsp;v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2]</tt></dd></dl>
+ <dl><dt><a name="-mod"><strong>mod</strong></a>(v)</dt><dd><tt>Modulus<br>
+&nbsp;<br>
+:param&nbsp;v:&nbsp;Vector&nbsp;1<br>
+:return:&nbsp;modulus&nbsp;sqrt(<a href="#-norm_sq">norm_sq</a>(v))</tt></dd></dl>
+ <dl><dt><a name="-norm_sq"><strong>norm_sq</strong></a>(v)</dt><dd><tt>Square&nbsp;modulus<br>
+&nbsp;<br>
+:param&nbsp;v:&nbsp;Vector&nbsp;1<br>
+:return:&nbsp;squared&nbsp;modulus&nbsp;<a href="#-dot_prod">dot_prod</a>(v,v)</tt></dd></dl>
+ <dl><dt><a name="-same"><strong>same</strong></a>(v1, v2)</dt><dd><tt>Checking&nbsp;vectors&nbsp;for&nbsp;identicality<br>
+&nbsp;<br>
+:param&nbsp;v1:&nbsp;Vector&nbsp;1<br>
+:param&nbsp;v2:&nbsp;Vector&nbsp;2<br>
+:return:&nbsp;If&nbsp;vectors&nbsp;are&nbsp;identical&nbsp;(true),&nbsp;otherwise&nbsp;(false)&nbsp;with&nbsp;a&nbsp;tolerance&nbsp;of&nbsp;1e-8</tt></dd></dl>
+ <dl><dt><a name="-scale"><strong>scale</strong></a>(v, scal)</dt><dd><tt>Multiplication&nbsp;of&nbsp;Vector&nbsp;with&nbsp;scalar<br>
+&nbsp;<br>
+:param&nbsp;v:&nbsp;vector<br>
+:param&nbsp;scal:&nbsp;scalar&nbsp;factor<br>
+:return:&nbsp;scaled&nbsp;vector&nbsp;[scal*v[0],scal*v[1],scal*v[2]]</tt></dd></dl>
+ <dl><dt><a name="-subv"><strong>subv</strong></a>(v1, v2)</dt><dd><tt>Vector&nbsp;difference<br>
+&nbsp;<br>
+:param&nbsp;v1:&nbsp;vector&nbsp;1<br>
+:param&nbsp;v2:&nbsp;vector&nbsp;2<br>
+:return:&nbsp;vector&nbsp;difference&nbsp;[v2[0]-v1[0],v2[1]-v1[1],v2[2]-v1[2]]</tt></dd></dl>
+</td></tr></table>
+</body></html>
