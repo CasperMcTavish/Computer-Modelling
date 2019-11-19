@@ -35,8 +35,8 @@ def main():
     u_outfile = open("totalenergyfile.txt", "w")
 
     # Set up simulation parameters
-    dt = 0.01
-    tfinal = 1
+    dt = float(input("Please determine timestep: "))
+    tfinal = 10
     t = 0.0
     tstep = int(tfinal / dt)
 
@@ -46,7 +46,7 @@ def main():
     #Open potential constants file
     file_pot = open(inputfile2, "r")
     #read line of file
-    line = file_handle.readline()
+    line = file_pot.readline()
     #split file into components at "," within file, should have 4 elements
     components = line.split(" ")
     #convert to floats and separate
@@ -57,14 +57,14 @@ def main():
     alpha = vals[2]
     #NOTE mass is included in the initial positions file, not in here
 
-
     #Create particles from initial position files
     p1 = Particle3D.from_file(file_handle)
     p2 = Particle3D.from_file(file_handle)
 
     # Write out initial conditions, separation & energy
-    separ = Particle3D.separation(p1,p2)
-    energy = mp.potenergy(p1,p2,re,De,alpha)
+    separ = np.linalg.norm(Particle3D.separation(p1,p2))
+    energy = p1.kinetic_energy() + p2.kinetic_energy() + mp.potenergy(p1,p2,re,De,alpha)
+
     u_outfile.write("{},{}\n".format(t,energy))
     sep_outfile.write("{},{}\n".format(t,separ))
     #u_outfile.write("{0:f} {1:f} {2:12.8f}\n".format(time,p1.position,energy))
@@ -74,7 +74,10 @@ def main():
     time_list = [t]
     sep_list = [separ]
     energy_list = [energy]
-
+    #Print out of important variables
+    print(p1)
+    print(p2)
+    print(separ)
     # Start the time integration loop, with steps being total time over step size
     for i in range(tstep):
         # Update particle positions
@@ -93,17 +96,16 @@ def main():
 
         # Output particle information
         #energy
-        energy = mp.potenergy(p1,p2,re,De,alpha)
+        energy = p1.kinetic_energy() + p2.kinetic_energy() + mp.potenergy(p1,p2,re,De,alpha)
         u_outfile.write("{},{}\n".format(t,energy))
         #separation
-        separ = Particle3D.separation(p1,p2)
+        separ = np.linalg.norm(Particle3D.separation(p1,p2))
         sep_outfile.write("{}{}\n".format(t,separ))
 
         # Append information to data lists
         time_list.append(t)
         sep_list.append(separ)
         energy_list.append(energy)
-
 
 
 
@@ -125,7 +127,6 @@ def main():
     pyplot.ylabel('Energy')
     pyplot.plot(time_list, energy_list)
     pyplot.show()
-
 
 # Execute main method, but only when directly invoked
 if __name__ == "__main__":

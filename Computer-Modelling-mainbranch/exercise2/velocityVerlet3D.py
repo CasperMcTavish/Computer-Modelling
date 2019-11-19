@@ -16,113 +16,121 @@ import sys
 import math
 import numpy as np
 import matplotlib.pyplot as pyplot
-from Particle1D import Particle1D
+from Particle3D import Particle3D
+import morsepotential as mp
 
-def force_dw(particle, a, b):
-    """
-    Method to return the force on a particle
-    in a double well potential.
-    Force is given by
-    F(x) = -dV/dx = -4*a*x^3 + 2*b*x
-
-    :param particle: Particle1D instance
-    :param a: parameter a from potential
-    :param b: parameter b from potential
-    :return: force acting on particle as Numpy array
-    """
-    force = -4*a*particle.position**3 + 2*b*particle.position
-    return force
-
-
-def pot_energy_dw(particle, a, b):
-    """
-    Method to return potential energy
-    of particle in double-well potential
-    V(x) = a*x^4 - b*x^2
-
-    :param particle: Particle1D instance
-    :param a: parameter a from potential
-    :param b: parameter b from potential
-    :return: potential energy of particle as float
-    """
-    potential = a*particle.position**4 - b*particle.position**2
-    return potential
 
 
 # Begin main code
 def main():
     # Read name of output file from command line
-    if len(sys.argv)!=2:
+    if len(sys.argv)!=3:
         print("Wrong number of arguments.")
         print("Usage: " + sys.argv[0] + " <output file>")
         quit()
     else:
-        outfile_name = sys.argv[1]
+        #input files for initial position & potential constants
+        inputfile1 = sys.argv[1]
+        inputfile2 = sys.argv[2]
 
-    # Open output file
-    outfile = open(outfile_name, "w")
+    # Open output files separation & total energy
+    sep_outfile = open("separationfile.txt", "w")
+    u_outfile = open("totalenergyfile.txt", "w")
 
     # Set up simulation parameters
-    dt = 0.01
-    numstep = 2000
-    time = 0.0
-    a = 0.1
-    b = 1.0
+    dt = float(input("Please determine timestep: "))
+    tfinal = 10
+    t = 0.0
+    tstep = int(tfinal / dt)
 
-    # Set up particle initial conditions:
-    #  position x0 = 0.0
-    #  velocity v0 = 1.0
-    #  mass      m = 1.0
-    p1 = Particle1D(0.0, 1.0, 1.0)
+    #open position file
+    file_handle = open(inputfile1,"r")
 
-    # Write out initial conditions
-    energy = p1.kinetic_energy() + pot_energy_dw(p1, a, b)
-    outfile.write("{0:f} {1:f} {2:12.8f}\n".format(time,p1.position,energy))
+    #Open potential constants file
+    file_pot = open(inputfile2, "r")
+    #read line of file
+    line = file_pot.readline()
+    #split file into components at "," within file, should have 4 elements
+    components = line.split(" ")
+    #convert to floats and separate
+    vals = [float(i) for i in components]
+    #separate for readability into constants
+    De = vals[0]
+    re = vals[1]
+    alpha = vals[2]
+    #NOTE mass is included in the initial positions file, not in here
 
-    # Get initial force
-    force = force_dw(p1, a, b)
+    #Create particles from initial position files
+    p1 = Particle3D.from_file(file_handle)
+    p2 = Particle3D.from_file(file_handle)
 
-    # Initialise data lists for plotting later
-    time_list = [time]
-    pos_list = [p1.position]
+
+
+    # Write out initial conditions, separation & energy
+    separ = np.linalg.norm(Particle3D.separation(p1,p2))
+    energy = p1.kinetic_energy() + p2.kinetic_energy() + mp.potenergy(p1,p2,re,De,alpha)
+
+    u_outfile.write("{},{}\n".format(t,energy))
+    sep_outfile.write("{},{}\n".format(t,separ))
+
+    #Find pairwiseforces
+    pairwisef1 = mp.pairwiseforces(p1,p2,re,De,alpha)
+    pairwisef2 = -pairwisef1
+
+    # Initialise data lists for plotting later, first points
+    time_list = [t]
+    sep_list = [separ]
     energy_list = [energy]
+    #Print out of important variables
+    print(p1)
+    print(p2)
+    print(separ)
 
     # Start the time integration loop
-    for i in range(numstep):
+    for i in range(tstep):
         # Update particle position
-        p1.leap_pos2nd(dt, force)
+        p1.leap_pos2nd(dt, pairwisef1)
+        p2.leap_pos2nd(dt, pairwisef2)
 
-        # Update force
-        force_new = force_dw(p1, a, b)
+        #new forces
+        prwsf1 = mp.pairwiseforces(p1,p2,re,De,alpha)
+        prwsf2 = -prwsf1
         # Update particle velocity by averaging
         # current and new forces
-        p1.leap_velocity(dt, 0.5*(force+force_new))
+        p1.leap_velocity(dt, 0.5*(pairwisef1+prwsf1))
+        p2.leap_velocity(dt, 0.5*(pairwisef2+prwsf2))
 
         # Re-define force value
-        force = force_new
+        pairwisef1 = prwsf1
+        pairwisef2 = prwsf2
 
         # Increase time
-        time += dt
+        t += dt
 
         # Output particle information
-        energy = p1.kinetic_energy() + pot_energy_dw(p1, a, b)
-        outfile.write("{0:f} {1:f} {2:12.8f}\n".format(time,p1.position,energy))
+        #energy
+        energy = p1.kinetic_energy() + p2.kinetic_energy() + mp.potenergy(p1,p2,re,De,alpha)
+        u_outfile.write("{},{}\n".format(t,energy))
+        #separation
+        separ = np.linalg.norm(Particle3D.separation(p1,p2))
+        sep_outfile.write("{}{}\n".format(t,separ))
 
         # Append information to data lists
-        time_list.append(time)
-        pos_list.append(p1.position)
+        time_list.append(t)
+        sep_list.append(separ)
         energy_list.append(energy)
 
 
     # Post-simulation:
     # Close output file
-    outfile.close()
+    sep_outfile.close()
+    u_outfile.close()
 
     # Plot particle trajectory to screen
-    pyplot.title('Velocity Verlet: position vs time')
+    pyplot.title('Velocity Verlet: Separation vs time')
     pyplot.xlabel('Time')
-    pyplot.ylabel('Position')
-    pyplot.plot(time_list, pos_list)
+    pyplot.ylabel('Separtion')
+    pyplot.plot(time_list, sep_list)
     pyplot.show()
 
     # Plot particle energy to screen

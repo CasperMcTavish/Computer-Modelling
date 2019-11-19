@@ -49,7 +49,7 @@ class Particle3D(object):
         "x = 2.0, y = 2.0, z = 2.0, vx = 0.5, vy = 0.5, vz = 0.5, m = 1.0"
         """
         """return "x = " + str(self.position[0]) ", y = " + str(self.position[1]) + ", z = " + str(self.position[2]) + ", v = " + str(self.velocity) + ", m = " + str(self.mass)"""
-        return "Label = " + str(self.label) + "x = " + str(self.position[0]) + ", y = " + str(self.position[1]) + ", z = " + str(self.position[2])
+        return "Label = " + str(self.label) + "x = " + str(self.position[0]) + ", y = " + str(self.position[1]) + ", z = " + str(self.position[2]) + ", vx = " + str(self.velocity[0]) + ", vy = " + str(self.velocity[1]) + ", vz = " + str(self.velocity[2])
 
     def kinetic_energy(self):
         """
@@ -72,7 +72,7 @@ class Particle3D(object):
         #Relies on force also being a 3D numpy array
         for i in range(3):
             self.velocity[i] += dt*force[i]/self.mass
-
+        return self.velocity
 
     def leap_pos1st(self, dt):
         """
@@ -83,6 +83,7 @@ class Particle3D(object):
         """
         for i in range(3):
             self.position[i] += dt*self.velocity[i]
+        return self.position
 
 
     def leap_pos2nd(self, dt, force):
@@ -96,6 +97,7 @@ class Particle3D(object):
         #requires force to be a 3D numpy array
         for i in range(3):
             self.position[i] += dt*self.velocity[i] + 0.5*dt**2*force[i]/self.mass
+        return self.position
 
     @staticmethod
     def from_file(file_handle):
@@ -119,11 +121,12 @@ class Particle3D(object):
     def separation(par1,par2):
         """
         Particle separation for two 3D particles
-        sep = par1 - par2
+        sep = par2 - par1
 
         :param par1: Particle 1
         :param par2: Particle 2
         """
+        #print((par2.position,par1.position))
         #finding separation
-        sep = par1.position - par2.position
+        sep = par2.position - par1.position
         return sep

@@ -25,7 +25,7 @@ def potenergy(particle1, particle2, re, De, alpha):
     #find separation using Particle3D separation
     sep = Particle3D.separation(particle1, particle2)
     #find potential by finding magnitude of separation and using given eqn
-    potential = De*((1-m.exp(-alpha*(np.linalg.norm(sep)-re)))**2-1)
+    potential = De*((1-np.exp(-alpha*(np.linalg.norm(sep)-re)))**2-1)
     return potential
 
 def pairwiseforces(particle1, particle2, re, De, alpha):
@@ -46,11 +46,12 @@ def pairwiseforces(particle1, particle2, re, De, alpha):
     #magnitude of separation vector
     r12 = np.linalg.norm(sep)
     #normalized separation vector
-    rnorm = np.true_divide(sep,r12)
+    rnorm = sep/r12
     #find constant out front
-    const = 2*alpha*De*((1-(m.exp(-alpha*(r12-re))))*(m.exp(-alpha*(r12-re))))
+    L = -alpha*(r12-re)
+    const = 2*alpha*De*(1-np.exp(L))*np.exp(L)
+    #const = 2*alpha*De*((1-(np.exp(-alpha*(r12-re))))*(np.exp(-alpha*(r12-re))))
     #find force on particle 1
     f1 = np.multiply(const,rnorm)
-    f2 = -f1
     #unsure if return both f1 or just one and inverse in main code
     return f1
