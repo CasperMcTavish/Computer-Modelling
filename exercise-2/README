@@ -1,0 +1,42 @@
+EXERCISE-2 README
+
+Contents
+1. LIST OF FILES AND PURPOSES
+2. CAVEATS
+
+
+===============================
+ 1. LIST OF FILES AND PURPOSES
+===============================
+
+eulerTsteps folder 	    - Folder of all graphs output at each time step for symplecticEuler3D.py
+
+verletTsteps folder 	    - Folder of all graphs output at each time step for velocityVerlet3D.py
+
+yvelparticle folder 	    - Folder of all graphs output at 0.0001 time step for N2 & O2 with spin using velocityVerlet3D.py
+
+Frequency Calculations 	    - Text file including all frequency calculations at all time steps
+
+initial_positions folder    - Folder of all text files with initial positions for particles, including spin
+
+potential_constants folder  - Folder of all text files with potential constants for particles
+
+morsepotential.py	    - Python script including all morse potential calculations
+
+Particle3D.py		    - Python class with all functions required for a Particle in 3D
+
+symplecticEuler3D.py        - Python script that requests two input files and asks for a timestep, then simulates a particle using symplectic Euler time integration method
+
+velocityVerlet3D.py         - Python script that requests two input files and asks for a timestep, then simulates a particle using velocity Verlet time integration method
+
+CompMod_Report.pdf	    - Report on the project.
+
+============
+ 2. CAVEATS
+============
+
+1 - When running velocityVerlet3D.py or symplecticEuler3D.py, one must input two files as arguments, first the initial positions file, then the potential constants file. Errors will be spit out if these requirements aren't met.
+
+2 - Make sure when running to either pull the position files out of the folder or correctly identify the directory when running velocityVerlet3D.py or symplecticEuler3D.py. Had issues with this in the past and couldn't figure out why it couldn't find the files!
+
+Thanks for assessing my project! :D
